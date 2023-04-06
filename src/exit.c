@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/06 13:12:31 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/06 15:43:28 by lfreydie         ###   ########.fr       */
+/*   Created: 2023/04/06 15:28:55 by lfreydie          #+#    #+#             */
+/*   Updated: 2023/04/06 15:41:51 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-int	main(int ac, char **av, char **env)
+void	ft_exit(char *err, int fd)
 {
-	if (!env | !env[0])
-		return (ft_exit(ERR_ENV, 2));
-	ft_parse(ac - 1, av + 1, env);
+	if (err)
+	{
+		if (fd == 2)
+			ft_putstr_fd(ERR, fd);
+		ft_putstr_fd(err, fd);
+	}
+	if (fd == 2)
+		exit(1);
+	exit(0);
 }
