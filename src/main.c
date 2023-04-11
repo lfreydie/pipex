@@ -6,7 +6,7 @@
 /*   By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 13:12:31 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/10 19:04:19 by lefreydier       ###   ########.fr       */
+/*   Updated: 2023/04/11 15:36:43 by lefreydier       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	main(int ac, char **av, char **env)
 {
-	t_pipex	pipex;
+	t_pipex	*pipex;
+	int	i;
 
+	i = -1;
 	if (!env | !env[0])
-		return (ft_exit(ERR_ENV, 2));
-	pipex = ft_parse(ac - 1, av + 1, env);
-	pipex.infile = open(av[1], O_RDONLY);
-	pipex.outfile = open(av[1], O_CREAT | O_RDWR | O_TRUNC, 0744);
-	if (f1 < 0 || f2 < 0)
-		return (ft_exit(ERR_NOP, 2));
-	pipex(f1, f2, av, env);
+		return (ft_exit(ERR_ENV, 2), 1);
+	while (env[++i])
+		printf("%s\n", env[i]);
+	pipex = ft_parse(ac, av, env);
+	// ft_pipex(pipex, av);
 }

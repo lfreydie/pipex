@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+         #
+#    By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/07 15:01:41 by lfreydie          #+#    #+#              #
-#    Updated: 2023/04/06 13:03:51 by lfreydie         ###   ########.fr        #
+#    Updated: 2023/04/11 15:33:25 by lefreydier       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,11 +46,11 @@ END=\033[0m
 
 # ----------- Files ----------- #
 
-SRC_F =	$(shell find $(SRC_DIR) -type f -name *.c)
+SRC =	$(shell find $(SRC_DIR) -type f -name *.c)
 # SRC = $(addprefix $(SRC_DIR)/, $(SRC_F))
 OBJ = $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(SRC:.c=.o))
 
-SRC_B_F =	$(shell find $(BONUS_DIR) -type f -name *.c)
+SRC_B =	$(shell find $(BONUS_DIR) -type f -name *.c)
 # SRC_B = $(addprefix $(BONUS_DIR)/, $(SRC_B_F))
 OBJ_B = $(patsubst $(BONUS_DIR)/%,$(OBJ_B_DIR)/%,$(SRC_B:.c=.o))
 
@@ -70,7 +70,7 @@ $(LIBFT) :
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(HD_DIR)
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -I $(HD_DIR) -I $(LIBFT_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) -I $(HD_DIR) -I $(LIBFT_DIR) -c $< -o $@
 
 $(OBJ_B_DIR)/%.o : $(BONUS_DIR)/%.c $(HD_DIR)
 	@mkdir -p $(dir $@)
