@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:12:16 by lefreydier        #+#    #+#             */
-/*   Updated: 2023/04/11 15:35:50 by lefreydier       ###   ########.fr       */
+/*   Updated: 2023/04/14 15:15:15 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ t_pipex	*ft_init(void)
 	pipex = ft_calloc(sizeof(*pipex), 1);
 	if (!pipex)
 		return (ft_exit(ERR_MAL, 2), NULL);
-	pipex->child_1 = ft_calloc(sizeof(*pipex->child_1), 1);
-	pipex->child_2 = ft_calloc(sizeof(*pipex->child_2), 1);
+	pipex->child = ft_calloc(sizeof(*pipex->child_1), 1);
+	pipex->child->next = ft_calloc(sizeof(*pipex->child_2), 1);
 	if (!pipex->child_1 || !pipex->child_2)
 		return (ft_free(pipex), ft_exit(ERR_MAL, 2), NULL);
 	return (pipex);
@@ -55,7 +55,7 @@ void	ft_get_paths(t_pipex *pipex)
 		{
 			printf("%s\n", path);
 			pipex->path = ft_split(path, ' ');
-			break;
+			break ;
 		}
 	}
 	if (!pipex->path)

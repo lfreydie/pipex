@@ -1,46 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/06 15:28:55 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/14 15:14:54 by lfreydie         ###   ########.fr       */
+/*   Created: 2023/04/13 15:43:45 by lfreydie          #+#    #+#             */
+/*   Updated: 2023/04/14 14:58:40 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	ft_exit(t_pipex *pipex, char *msg)
+void	get_cmd(t_pipex *pipex, char *cmd)
 {
-	if (msg)
-		ft_putstr(msg);
-	ft_free_pipex(pipex);
-	exit(0);
+	pipex->child->cmd = ft_split(cmd, ' ');
+	if (!pipex->child->cmd)
+		perror("split");
 }
 
-void	ft_error_exit(t_pipex *pipex, char *err)
+char	*get_path_cmd(t_pipex *pipex, int i)
 {
-	if (err)
-		perror(err);
-	else
-		strerror(errno);
-	ft_free(pipex);
-	exit(1);
-}
+	char	*tmp;
+	char	*rslt;
 
-void	ft_free_pipex(t_pipex *pipex)
-{
-	if (pipex)
-	{
-		if (pipex->child)
-			ft_free_child(pipex->child);
-		if 
-	}
-}
-
-void	ft_free_child(t_child *child)
-{
-
+	tmp = ft_strjoin(pipex->path[i], "/");
+	rslt = ft_strjoin(tmp, pipex->child->cmd[0]);
+	return ()
 }

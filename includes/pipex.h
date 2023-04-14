@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 13:06:33 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/11 15:34:41 by lefreydier       ###   ########.fr       */
+/*   Updated: 2023/04/14 15:06:44 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <errno.h>
 
 # define ERROR 1
 # define SUCCESS 0
@@ -33,15 +34,14 @@
 
 typedef struct s_child
 {
-	pid_t	child;
-	char	*cmd;
-	char	**cmd_args;
+	pid_t			child;
+	char			**cmd;
+	struct s_child	*next;
 }	t_child;
 
 typedef struct s_pipex
 {
-	t_child	*child_1;
-	t_child	*child_2;
+	t_child	*child;
 	int		tube[2];
 	int		infile;
 	int		outfile;
@@ -55,11 +55,12 @@ t_pipex	*ft_init(void);
 void	ft_get_paths(t_pipex *pipex);
 
 //	PIPEX
-// void	ft_pipex(int f1, int f2, char **av, char **env);
-// void	child_1_process(int f1, char *cmd);
+void	ft_pipex(t_pipex *pipex, char **av);
+void	child_1_process(int f1, char *cmd);
 
 //	EXIT
-void	ft_exit(char *err, int fd);
-void	ft_free(t_pipex *pipex);
+void	ft_exit(t_pipex *pipex, char *msg);
+void	ft_error_exit(t_pipex *pipex, char *err);
+void	ft_free_pipex(t_pipex *pipex);
 
 #endif
