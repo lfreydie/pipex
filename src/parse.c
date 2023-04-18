@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 19:12:16 by lefreydier        #+#    #+#             */
-/*   Updated: 2023/04/14 15:15:15 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/15 12:46:07 by lefreydier       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ t_pipex	*ft_parse(int narg, char **av, char **env)
 {
 	t_pipex	*pipex;
 
-	if (narg != 5)
-		return (ft_exit(ERR_ARG, 2), NULL);
-	pipex = ft_init();
+	if (narg < 5)
+		return (ft_error_exit(NULL, ERR_ARG), NULL);
+	pipex = ft_init(narg, av);
 	pipex->infile = open(av[1], O_RDONLY);
 	pipex->outfile = open(av[4], O_CREAT | O_RDWR | O_TRUNC, 0744);
 	if (pipex->infile < 0 || pipex->outfile < 0)
@@ -28,17 +28,25 @@ t_pipex	*ft_parse(int narg, char **av, char **env)
 	return (pipex);
 }
 
-t_pipex	*ft_init(void)
+t_pipex	*ft_init(int narg, char **av)
 {
 	t_pipex	*pipex;
+	int		i;
 
+	i = 2;
 	pipex = ft_calloc(sizeof(*pipex), 1);
 	if (!pipex)
-		return (ft_exit(ERR_MAL, 2), NULL);
-	pipex->child = ft_calloc(sizeof(*pipex->child_1), 1);
-	pipex->child->next = ft_calloc(sizeof(*pipex->child_2), 1);
-	if (!pipex->child_1 || !pipex->child_2)
-		return (ft_free(pipex), ft_exit(ERR_MAL, 2), NULL);
+		return (ft_error_exit(NULL, ERR_MAL), NULL);
+	while (i < narg - 1)
+	{
+		if (!pipex->child)
+			ft_lstnew(get_cmd(av[i]));
+		
+		// pipex->child = ft_calloc(sizeof(*pipex->child), 1);
+		// if (!pipex->child)
+		// 	return (ft_error_exit(pipex, ERR_MAL), NULL);
+		i++;
+	}
 	return (pipex);
 }
 

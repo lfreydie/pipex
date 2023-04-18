@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 13:06:33 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/14 15:06:44 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/15 12:38:34 by lefreydier       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 
 typedef struct s_child
 {
-	pid_t			child;
+	pid_t			process;
 	char			**cmd;
 	struct s_child	*next;
 }	t_child;
@@ -51,7 +51,7 @@ typedef struct s_pipex
 
 //	PARSE
 t_pipex	*ft_parse(int narg, char **av, char **env);
-t_pipex	*ft_init(void);
+t_pipex	*ft_init(int narg, char **av);
 void	ft_get_paths(t_pipex *pipex);
 
 //	PIPEX

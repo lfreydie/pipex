@@ -6,20 +6,20 @@
 /*   By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 15:07:29 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/11 15:09:40 by lefreydier       ###   ########.fr       */
+/*   Updated: 2023/04/15 12:43:45 by lefreydier       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 
-t_list	*ft_lstnew(void *content)
+t_child	*ft_lstnew(char **cmd)
 {
-	t_list	*new;
+	t_child	*new;
 
-	new = malloc(sizeof(t_list));
+	new = ft_calloc(sizeof(t_list), 1);
 	if (!new)
 		return (NULL);
-	new->content = content;
+	new->cmd = cmd;
 	new->next = NULL;
 	return (new);
 }
