@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/24 15:07:29 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/15 12:43:45 by lefreydier       ###   ########.fr       */
+/*   Updated: 2023/04/18 11:43:35 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/libft.h"
 
-t_child	*ft_lstnew(char **cmd)
+t_list	*ft_lstnew(void *content)
 {
-	t_child	*new;
+	t_list	*new;
 
 	new = ft_calloc(sizeof(t_list), 1);
 	if (!new)
 		return (NULL);
-	new->cmd = cmd;
+	new->content = content;
 	new->next = NULL;
 	return (new);
 }

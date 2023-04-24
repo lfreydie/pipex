@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+        */
+/*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 13:06:33 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/15 12:38:34 by lefreydier       ###   ########.fr       */
+/*   Updated: 2023/04/24 18:39:08 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,17 @@
 
 # include "libft.h"
 # include <stdlib.h>
+# include <string.h>
 # include <stdio.h>
 # include <unistd.h>
-# include <sys/types.h>
-# include <sys/stat.h>
+# include <sys/wait.h>
 # include <fcntl.h>
 # include <errno.h>
 
 # define ERROR 1
 # define SUCCESS 0
+# define READ 0
+# define WRITE 1
 # define ERR "Error\n"
 # define ERR_ARG "Invalid number of arguments\n"
 # define ERR_CMD "Command not found\n"
@@ -32,35 +34,16 @@
 # define ERR_ENV "Environnement error\n"
 # define ERR_NOP "The file doesn't open or isn't a file\n"
 
-typedef struct s_child
-{
-	pid_t			process;
-	char			**cmd;
-	struct s_child	*next;
-}	t_child;
-
-typedef struct s_pipex
-{
-	t_child	*child;
-	int		tube[2];
-	int		infile;
-	int		outfile;
-	char	**path;
-	char	**env;
-}	t_pipex;
-
-//	PARSE
-t_pipex	*ft_parse(int narg, char **av, char **env);
-t_pipex	*ft_init(int narg, char **av);
-void	ft_get_paths(t_pipex *pipex);
-
 //	PIPEX
-void	ft_pipex(t_pipex *pipex, char **av);
-void	child_1_process(int f1, char *cmd);
+void	pipex_process(int f_in, int f_out, int ac, char **av);
+pid_t	fork_process(int pipefd[2], int file, char *cmd, int child);
+void	child_process(int file, int pipefd[2], char *cmd, int child);
 
-//	EXIT
-void	ft_exit(t_pipex *pipex, char *msg);
-void	ft_error_exit(t_pipex *pipex, char *err);
-void	ft_free_pipex(t_pipex *pipex);
+
+//	PIPEX_UTILS
+char	**get_paths(void);
+char	*get_path_cmd(char *paths, char *cmd);
+void	execute(char *cmd);
+void	free_tab(char **tab);
 
 #endif

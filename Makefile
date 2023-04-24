@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lefreydier <lefreydier@student.42.fr>      +#+  +:+       +#+         #
+#    By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/07 15:01:41 by lfreydie          #+#    #+#              #
-#    Updated: 2023/04/11 15:33:25 by lefreydier       ###   ########.fr        #
+#    Updated: 2023/04/24 15:47:28 by lfreydie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,17 +14,14 @@
 
 CC ?= gcc
 NAME := pipex
-NAME_B := pipex_bonus
 CFLAGS += -Wall -Wextra -Werror -g
-LIB_FLAGS = -L
+LIB_FLAGS = -L -lft
 
 # -------- Directories -------- #
 
 HD_DIR = ./includes
 SRC_DIR = ./src
-BONUS_DIR = ./bonus
 OBJ_DIR = ./objs
-OBJ_B_DIR = ./objs_b
 LIBFT_DIR = ./libft
 
 # ---------- Delete ----------- #
@@ -46,19 +43,15 @@ END=\033[0m
 
 # ----------- Files ----------- #
 
-SRC =	$(shell find $(SRC_DIR) -type f -name *.c)
-# SRC = $(addprefix $(SRC_DIR)/, $(SRC_F))
+SRC_F =	pipex.c	pipex_utils.c
+SRC = $(addprefix $(SRC_DIR)/, $(SRC_F))
 OBJ = $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(SRC:.c=.o))
-
-SRC_B =	$(shell find $(BONUS_DIR) -type f -name *.c)
-# SRC_B = $(addprefix $(BONUS_DIR)/, $(SRC_B_F))
-OBJ_B = $(patsubst $(BONUS_DIR)/%,$(OBJ_B_DIR)/%,$(SRC_B:.c=.o))
 
 # --------- Compiles ---------- #
 
 $(NAME) :	$(LIBFT) $(OBJ)
 	@echo "$(BLUE) ==== Project compiling ==== $(END)"
-	@$(CC) $(CFLAGS) -I $(HD_DIR) $(OBJ) $(LIBFT) $(LIB_FLAGS) -o $(NAME)
+	@$(CC) $(CFLAGS) -I $(HD_DIR) $(OBJ) $(LIB_FLAGS) $(LIBFT) -o $(NAME)
 	@echo "$(GREEN) ==== Project compiled ==== $(END)"
 
 $(LIBFT) :
@@ -72,26 +65,17 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(HD_DIR)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -I $(HD_DIR) -I $(LIBFT_DIR) -c $< -o $@
 
-$(OBJ_B_DIR)/%.o : $(BONUS_DIR)/%.c $(HD_DIR)
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -I $(HD_DIR) -I $(LIBFT_DIR) -c $< -o $@
-
 # ----------- Rules ----------- #
 
 all :	$(NAME)
 
-bonus :	$(LIBFT) $(OBJ_B)
-	@echo "$(BLUE) ==== Bonus compiling ==== $(END)"
-	@$(CC) $(CFLAGS) -I $(HD_DIR) $(OBJ_B) $(LIBFT) $(LIB_FLAGS) -o $(NAME_B)
-	@echo "$(GREEN) ==== Bonus compiled ==== $(END)"
-
 clean :
-	@$(RM) $(RM_OPT) $(OBJ_DIR) $(OBJ_B_DIR)
+	@$(RM) $(RM_OPT) $(OBJ_DIR)
 	@make clean -sC $(LIBFT_DIR)
 	@echo "$(PINK) ==== All object removed ==== $(END)"
 
 fclean :	clean
-	@$(RM) $(NAME) $(NAME_B)
+	@$(RM) $(NAME)
 	@make fclean -sC $(LIBFT_DIR)
 	@echo "$(RED) ==== Executables removed ==== $(END)"
 
