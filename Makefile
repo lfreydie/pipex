@@ -6,7 +6,7 @@
 #    By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/07 15:01:41 by lfreydie          #+#    #+#              #
-#    Updated: 2023/04/24 15:47:28 by lfreydie         ###   ########.fr        #
+#    Updated: 2023/04/25 19:45:32 by lfreydie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ END=\033[0m
 
 # ----------- Files ----------- #
 
-SRC_F =	pipex.c	pipex_utils.c
+SRC_F =	pipex.c	utils.c	exec.c exit.c
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_F))
 OBJ = $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(SRC:.c=.o))
 
@@ -63,7 +63,7 @@ $(LIBFT) :
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(HD_DIR)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -I $(HD_DIR) -I $(LIBFT_DIR) -c $< -o $@
+	@$(CC) $(CFLAGS) -I $(HD_DIR) -I $(LIBFT_DIR) -c $< -o $@
 
 # ----------- Rules ----------- #
 

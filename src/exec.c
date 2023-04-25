@@ -1,41 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 11:26:46 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/24 17:43:35 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/25 19:47:35 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-char	**get_paths(void)
-{
-	extern char	**environ;
-	char		*env_path;
-	char		**paths;
-	int			i;
 
-	i = 0;
-	if (!environ)
-		perror("envp");
-	while (environ[i])
-	{
-		env_path = ft_strnstr(environ[i], "PATH=", 5);
-		if (env_path)
-			break ;
-		i++;
-	}
-	if (!env_path)
-		perror("path not found");
-	paths = ft_split(env_path + 5, ':');
-	if (!paths)
-		perror("split");
-	return (paths);
-}
 
 char	*get_path_cmd(char *paths, char *cmd)
 {
@@ -52,41 +29,28 @@ char	*get_path_cmd(char *paths, char *cmd)
 	return (path);
 }
 
-void	execute(char *cmd)
+void	execute(t_pipex *infos, int i)
 {
-	char		**cmd_cut;
 	char		**paths;
 	char		*path_cmd;
-	extern char	**environ;
-	int			i;
+	int			n;
 
-	i = 0;
-	cmd_cut = ft_split(cmd, ' ');
-	if (!cmd_cut || !(*cmd_cut))
-		perror("split");
-	paths = get_paths();
-	if (!paths)
-		perror("split");
-	while (paths[i])
+	n = 0;
+	paths = get_paths(infos);
+	while (paths[n])
 	{
-		path_cmd = get_path_cmd(paths[i], cmd_cut[0]);
-		execve(path_cmd, cmd_cut, environ);
+		path_cmd = get_path_cmd(paths[n], infos->cmds[i].cmd[0]);
+		if (!access(path_cmd, F_OK))
+		{
+			execve(path_cmd, infos->cmds[i].cmd, infos->env);
+			free(path_cmd);
+			free_tab(infos->cmds[i].cmd);
+			free_tab(paths);
+			ft_exit(infos, "EXECUTE");
+		}
 		free(path_cmd);
-		i++;
+		n++;
 	}
-	free_tab(cmd_cut);
-	free_tab(paths);
 }
 
-void	free_tab(char **tab)
-{
-	int	i;
 
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-}

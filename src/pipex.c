@@ -6,87 +6,82 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 11:13:16 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/24 18:39:04 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/25 19:54:41 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **envp)
 {
-	int		f_in;
-	int		f_out;
+	t_pipex	*infos;
 
 	if (ac < 5)
 		return (ft_putstr_fd(ERR_ARG, 2), 127);
-	f_in = open(av[1], O_RDONLY);
-	if (f_in < 0)
-		return (perror("open"), errno);
-	f_out = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (f_out < 0)
-		return (close(f_in), perror("open"), errno);
-	pipex_process(f_in, f_out, ac, av);
+	if (!envp)
+		ft_exit(NULL, ERR_ENV);//checker
+	infos = init_struct(ac, av, envp);
+	pipex_process(infos);
+	return (1);
 }
 
-void	pipex_process(int f_in, int f_out, int ac, char **av)
+void	pipex_process(t_pipex *infos)
 {
 	int		status;
-	int		pipefd[2];
-	pid_t	*pid_tab;
 	int		i;
 
-	i = 2;
-	pipe(pipefd);
-	pid_tab = ft_calloc(ac - 3, sizeof(*pid_tab));
-	if (!pid_tab)
-		perror("calloc");
-	pid_tab[0] = fork_process(pipefd, f_in, av[2], 1);
-	while (++i < ac - 2)
-		pid_tab[i - 2] = fork_process(pipefd, 0, av[i], 2);
-	pid_tab[ac - 2] = fork_process(pipefd, f_out, av[ac - 2], 3);
-	close(pipefd[READ]);
-	close(pipefd[WRITE]);
+	pipe(infos->pipefd);
+	i = 0;
+	while (++i < infos->ncmd)
+		infos->cmds[i].pid = fork_process(infos, i);
+	close(infos->pipefd[READ]);
+	close(infos->pipefd[WRITE]);
 	i = -1;
-	while (++i < ac - 2)
-		waitpid(pid_tab[i], &status, 0);
+	waitpid(infos->cmds[infos->ncmd - 1].pid, &status, 0);
+	while (++i < infos->ncmd - 1)
+		wait(NULL);
 }
 
-pid_t	fork_process(int pipefd[2], int file, char *cmd, int child)
+pid_t	fork_process(t_pipex *infos, int i)
 {
 	pid_t	pid;
 
+	redir(infos, i);
 	pid = fork();
 	if (pid < 0)
-		return (perror("fork"), 0);
+		return (perror("FORK"), 0);
 	if (pid == 0)
-		child_process(file, pipefd, cmd, child);
+	{
+		execute(infos, i);
+		ft_exit(infos, "EXEC");
+	}
 	return (pid);
 }
 
-void	child_process(int file, int pipefd[2], char *cmd, int child)
+void	redir(t_pipex *infos, int i)
 {
-	if (child == 1)
+	int	io_fd[2];
+
+	if (!i)
 	{
-		if (dup2(file, STDIN_FILENO) < 0)
-			perror("dup2");
+		io_fd[0] = open(infos->infile, O_RDONLY);
+		if (io_fd[0] < 0)
+			perror("open");
 	}
 	else
+		io_fd[0] = infos->pipefd[0];
+	if (i == infos->ncmd - 1)
 	{
-		if (dup2(pipefd[READ], STDIN_FILENO) < 0)
-			perror("dup2");
-	}
-	if (child == 3)
-	{
-		if (dup2(file, STDOUT_FILENO) < 0)
-			perror("dup2");
+		io_fd[1] = open(infos->outfile, O_CREAT | O_APPEND | O_WRONLY);
+		if (io_fd[1] < 0)
+			perror("open");
 	}
 	else
-	{
-		if (dup2(pipefd[WRITE], STDOUT_FILENO) < 0)
-			perror("dup2");
-	}
-	close(pipefd[WRITE]);
-	close(pipefd[READ]);
-	execute(cmd);
-	exit(EXIT_FAILURE);
+		io_fd[1] = infos->pipefd[1];
+	if (dup2(io_fd[0], STDIN_FILENO) < 0)
+		perror("dup");
+	if (dup2(io_fd[1], STDOUT_FILENO) < 0)
+		perror("dup");
+	close(io_fd[0]);
+	close(io_fd[1]);
 }
