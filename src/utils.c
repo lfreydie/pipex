@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:08:25 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/25 19:47:02 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/26 14:18:54 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	parse_cmd(t_pipex *infos, char **av)
 	i = -1;
 	while (++i < infos->ncmd)
 	{
-		infos->cmds->cmd = ft_split(av[i + 2], ' ');
+		infos->cmds[i].cmd = ft_split(av[i + 2], ' ');
 		if (!infos->cmds->cmd || !(*infos->cmds->cmd))
 			ft_exit(infos, ERR_MAL);
 	}

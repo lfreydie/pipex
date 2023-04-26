@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 11:26:46 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/25 19:47:35 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/26 14:37:15 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	execute(t_pipex *infos, int i)
 		{
 			execve(path_cmd, infos->cmds[i].cmd, infos->env);
 			free(path_cmd);
-			free_tab(infos->cmds[i].cmd);
 			free_tab(paths);
 			ft_exit(infos, "EXECUTE");
 		}
