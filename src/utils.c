@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:08:25 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/26 14:18:54 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/28 12:51:24 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**get_paths(t_pipex *infos)
 
 	i = 0;
 	if (!infos->env)
-		ft_exit(infos, ERR_ENV);
+		return (NULL);
 	while (infos->env[i])
 	{
 		env_path = ft_strnstr(infos->env[i], "PATH=", 5);
