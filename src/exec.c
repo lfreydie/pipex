@@ -6,13 +6,11 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 11:26:46 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/28 12:43:11 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/30 11:39:25 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-
-
 
 char	*get_path_cmd(char *paths, char *cmd)
 {
@@ -51,5 +49,3 @@ void	execute(t_pipex *infos, int i)
 	free_tab(paths);
 	return ;
 }
-
-

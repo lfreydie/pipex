@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:08:25 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/28 12:51:24 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/30 18:43:24 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ t_pipex	*init_struct(int ac, char **av, char **envp)
 	infos = ft_calloc(sizeof(*infos), 1);
 	if (!infos)
 		return (ft_exit(NULL, ERR_MAL), NULL);
-	infos->infile = av[1];
-	infos->outfile = av[ac - 1];
-	infos->env = envp;
 	infos->ncmd = ac - 3;
+	infos->env = envp;
+	heredoc_set(infos, av);
+	infos->outfile = av[ac - 1];
+	ft_printf("%d", infos->ncmd);
 	parse_cmd(infos, av);
 	return (infos);
 }
@@ -57,12 +58,71 @@ void	parse_cmd(t_pipex *infos, char **av)
 
 	infos->cmds = ft_calloc(sizeof(*infos->cmds), infos->ncmd);
 	if (!infos->cmds)
+	{
+		if (infos->heredoc)
+			close(infos->tmp_fdin);
 		ft_exit(infos, ERR_MAL);
+	}
 	i = -1;
 	while (++i < infos->ncmd)
 	{
-		infos->cmds[i].cmd = ft_split(av[i + 2], ' ');
+		infos->cmds[i].cmd = ft_split(av[i + 2 + infos->heredoc], ' ');
 		if (!infos->cmds->cmd || !(*infos->cmds->cmd))
+		{
+			if (infos->heredoc)
+				close(infos->tmp_fdin);
 			ft_exit(infos, ERR_MAL);
+		}
+	}
+}
+
+void	heredoc_set(t_pipex *infos, char **av)
+{
+	if (ft_strncmp(av[1], "here_doc", 8) == 0)
+	{
+		infos->ncmd--;
+		if (infos->ncmd < 2)
+			ft_exit(infos, ERR_ARG);
+		infos->heredoc = 1;
+		infos->infile = "heredoc";
+		infos->tmp_fdin = open(infos->infile, \
+		O_WRONLY | O_CREAT | O_EXCL, 0644);
+		if (infos->tmp_fdin < 0)
+			perror(infos->infile);
+		else
+			heredoc_write(infos, av[2]);
+	}
+	else
+		infos->infile = av[1];
+}
+
+void	heredoc_write(t_pipex *infos, char *limiter)
+{
+	char	*line;
+	int		i;
+
+	line = "ajout";
+	limiter = ft_strjoin(limiter, "\n");
+	while (line)
+	{
+		i = -1;
+		while (++i < infos->ncmd - 1)
+			write(1, "pipe ", 5);
+		write(1, "heredoc> ", 9);
+		line = get_next_line(0);
+		// if (!line)
+		// 	break ;
+		if (ft_strncmp(limiter, line, ft_strlen(limiter)))
+		{
+			write(infos->tmp_fdin, line, ft_strlen(line));
+			free(line);
+			line = "ajout";
+		}
+		else
+		{
+			free(line);
+			free(limiter);
+			break ;
+		}
 	}
 }

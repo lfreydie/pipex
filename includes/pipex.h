@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 13:06:33 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/28 12:06:01 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/30 14:58:37 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_pipex
 	int		pipefd[2];
 	int		tmp_fdin;
 	int		ncmd;
+	int		heredoc;
 }	t_pipex;
 
 //	PIPEX
@@ -64,6 +65,8 @@ void	execute(t_pipex *infos, int i);
 t_pipex	*init_struct(int ac, char **av, char **envp);
 char	**get_paths(t_pipex *infos);
 void	parse_cmd(t_pipex *infos, char **av);
+void	heredoc_set(t_pipex *infos, char **av);
+void	heredoc_write(t_pipex *infos, char *limiter);
 
 //	EXIT
 void	ft_exit(t_pipex *infos, char *err);

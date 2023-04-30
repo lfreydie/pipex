@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:39:25 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/25 19:50:38 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/04/30 18:31:50 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,17 @@ void	ft_exit(t_pipex *infos, char *err)
 
 void	free_infos(t_pipex *infos)
 {
+	int	i;
+
 	if (infos)
 	{
 		if (infos->cmds)
+		{
+			i = -1;
+			while (++i < infos->ncmd)
+				free(infos->cmds[i].cmd);
 			free(infos->cmds);
+		}
 		free(infos);
 	}
 }
