@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 11:13:16 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/05/01 15:50:02 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/01 16:41:10 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void	redir(t_pipex *infos, int i)
 	if (i == infos->ncmd - 1)
 	{
 		if (!infos->heredoc)
-			io_fd = open(infos->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
+			io_fd = open(infos->outfile, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		else
-			io_fd = open(infos->outfile, O_RDWR | O_CREAT | O_APPEND, 0644);
+			io_fd = open(infos->outfile, O_CREAT | O_APPEND | O_WRONLY, 0644);
 		if (io_fd < 0)
 			perror(infos->outfile);
 		if (io_fd >= 0 && dup2(io_fd, STDOUT_FILENO) < 0)

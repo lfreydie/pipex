@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 11:26:46 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/05/01 15:57:14 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/01 16:19:59 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,8 @@ void	execute(t_pipex *infos, int i)
 void	execute_path(t_pipex *infos, int i)
 {
 	if (!access(infos->tab_cmd[i].cmd[0], X_OK))
-	{
 		execve(infos->tab_cmd[i].cmd[0], infos->tab_cmd[i].cmd, infos->env);
-		perror(infos->tab_cmd[i].cmd[0]);
-	}
-	if (!access(infos->tab_cmd[i].cmd[0], F_OK))
-		perror(infos->tab_cmd[i].cmd[0]);
-	execute(infos, i);
+	if (access(infos->tab_cmd[i].cmd[0], F_OK))
+		execute(infos, i);
 	return ;
 }
