@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:08:25 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/05/01 16:00:35 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/01 17:26:48 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,10 @@ void	heredoc_set(t_pipex *infos, char **av)
 		if (infos->tmp_fdin < 0)
 			perror(infos->infile);
 		else
+		{
 			heredoc_write(infos, av[2]);
+			close(infos->tmp_fdin);
+		}
 	}
 	else
 		infos->infile = av[1];
