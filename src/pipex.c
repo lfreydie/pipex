@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 11:13:16 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/05/01 14:34:17 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/01 15:50:02 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void	pipex_process(t_pipex *infos)
 	}
 	i = -1;
 	while (++i < infos->ncmd)
-		infos->cmds[i].pid = fork_process(infos, i);
+		infos->tab_cmd[i].pid = fork_process(infos, i);
 	close(infos->tmp_fdin);
 	i = -1;
-	waitpid(infos->cmds[infos->ncmd - 1].pid, &status, 0);
+	waitpid(infos->tab_cmd[infos->ncmd - 1].pid, &status, 0);
 	while (++i < infos->ncmd - 1)
 		wait(0);
 }
@@ -59,8 +59,11 @@ pid_t	fork_process(t_pipex *infos, int i)
 	if (pid == 0)
 	{
 		redir(infos, i);
-		execute(infos, i);
-		ft_exit(infos, infos->cmds[i].cmd[0]);
+		if (ft_strchr(infos->tab_cmd[i].cmd[0], '/'))
+			execute_path(infos, i);
+		else
+			execute(infos, i);
+		ft_exit(infos, infos->tab_cmd[i].cmd[0]);
 	}
 	close(infos->tmp_fdin);
 	close(infos->pipefd[1]);

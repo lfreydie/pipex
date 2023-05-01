@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 13:06:33 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/30 14:58:37 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/01 15:57:27 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_cmd
 
 typedef struct s_pipex
 {
-	t_cmd	*cmds;
+	t_cmd	*tab_cmd;
 	char	**env;
 	char	*infile;
 	char	*outfile;
@@ -60,6 +60,7 @@ void	redir(t_pipex *infos, int i);
 //	EXEC
 char	*get_path_cmd(char *paths, char *cmd);
 void	execute(t_pipex *infos, int i);
+void	execute_path(t_pipex *infos, int i);
 
 //	UTILS
 t_pipex	*init_struct(int ac, char **av, char **envp);

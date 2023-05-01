@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:08:25 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/05/01 14:41:16 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/01 16:00:35 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	parse_cmd(t_pipex *infos, char **av)
 {
 	int	i;
 
-	infos->cmds = ft_calloc(sizeof(*infos->cmds), infos->ncmd);
-	if (!infos->cmds)
+	infos->tab_cmd = ft_calloc(sizeof(*infos->tab_cmd), infos->ncmd);
+	if (!infos->tab_cmd)
 	{
 		if (infos->heredoc)
 			close(infos->tmp_fdin);
@@ -65,8 +65,8 @@ void	parse_cmd(t_pipex *infos, char **av)
 	i = -1;
 	while (++i < infos->ncmd)
 	{
-		infos->cmds[i].cmd = ft_split(av[i + 2 + infos->heredoc], ' ');
-		if (!infos->cmds[i].cmd || !(*infos->cmds[i].cmd))
+		infos->tab_cmd[i].cmd = ft_split(av[i + 2 + infos->heredoc], ' ');
+		if (!infos->tab_cmd[i].cmd || !(*infos->tab_cmd[i].cmd))
 		{
 			if (infos->heredoc)
 				close(infos->tmp_fdin);
@@ -109,18 +109,16 @@ void	heredoc_write(t_pipex *infos, char *limiter)
 			write(1, "pipe ", 5);
 		write(1, "heredoc> ", 9);
 		line = get_next_line(0);
-		// if (!line)
-		// 	break ;
+		if (!line)
+			(free(limiter), close(infos->tmp_fdin), ft_exit(infos, ERR_MAL));
 		if (ft_strncmp(limiter, line, ft_strlen(limiter)))
 		{
 			write(infos->tmp_fdin, line, ft_strlen(line));
-			free(line);
-			line = "ajout";
+			(free(line), line = "ajout");
 		}
 		else
 		{
-			free(line);
-			free(limiter);
+			(free(line), free(limiter));
 			break ;
 		}
 	}
