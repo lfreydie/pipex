@@ -6,7 +6,7 @@
 #    By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/07 15:01:41 by lfreydie          #+#    #+#              #
-#    Updated: 2023/04/25 19:45:32 by lfreydie         ###   ########.fr        #
+#    Updated: 2023/05/01 14:38:41 by lfreydie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 CC ?= gcc
 NAME := pipex
-CFLAGS += -Wall -Wextra -Werror -g
+CFLAGS += -Wall -Wextra -Werror -g3
 LIB_FLAGS = -L -lft
 
 # -------- Directories -------- #

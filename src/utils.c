@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:08:25 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/30 18:43:24 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/01 14:41:16 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ t_pipex	*init_struct(int ac, char **av, char **envp)
 	infos->env = envp;
 	heredoc_set(infos, av);
 	infos->outfile = av[ac - 1];
-	ft_printf("%d", infos->ncmd);
 	parse_cmd(infos, av);
 	return (infos);
 }
@@ -67,7 +66,7 @@ void	parse_cmd(t_pipex *infos, char **av)
 	while (++i < infos->ncmd)
 	{
 		infos->cmds[i].cmd = ft_split(av[i + 2 + infos->heredoc], ' ');
-		if (!infos->cmds->cmd || !(*infos->cmds->cmd))
+		if (!infos->cmds[i].cmd || !(*infos->cmds[i].cmd))
 		{
 			if (infos->heredoc)
 				close(infos->tmp_fdin);
@@ -86,7 +85,7 @@ void	heredoc_set(t_pipex *infos, char **av)
 		infos->heredoc = 1;
 		infos->infile = "heredoc";
 		infos->tmp_fdin = open(infos->infile, \
-		O_WRONLY | O_CREAT | O_EXCL, 0644);
+		O_RDWR | O_CREAT | O_EXCL, 0644);
 		if (infos->tmp_fdin < 0)
 			perror(infos->infile);
 		else

@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/18 11:13:16 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/04/30 18:36:15 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/01 14:34:17 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void	redir(t_pipex *infos, int i)
 			perror("dup2");
 	}
 	close(infos->tmp_fdin);
-	if (i == 0)
-		close(infos->pipefd[0]);
+	close(infos->pipefd[0]);
 	close(infos->pipefd[1]);
 }
