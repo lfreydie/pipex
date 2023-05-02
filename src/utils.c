@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/25 16:08:25 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/05/01 17:26:48 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/02 15:57:54 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ char	**get_paths(t_pipex *infos)
 		i++;
 	}
 	if (!env_path)
-		ft_exit(infos, ERR_ENV);
+		ft_exit(infos, NULL);
 	paths = ft_split(env_path + 5, ':');
 	if (!paths)
-		ft_exit(infos, ERR_ENV);
+		ft_exit(infos, ERR_MAL);
 	return (paths);
 }
 
@@ -90,7 +90,7 @@ void	heredoc_set(t_pipex *infos, char **av)
 			perror(infos->infile);
 		else
 		{
-			heredoc_write(infos, av[2]);
+			heredoc_write(infos, av[2], "ajout");
 			close(infos->tmp_fdin);
 		}
 	}
@@ -98,12 +98,10 @@ void	heredoc_set(t_pipex *infos, char **av)
 		infos->infile = av[1];
 }
 
-void	heredoc_write(t_pipex *infos, char *limiter)
+void	heredoc_write(t_pipex *infos, char *limiter, char *line)
 {
-	char	*line;
 	int		i;
 
-	line = "ajout";
 	limiter = ft_strjoin(limiter, "\n");
 	while (line)
 	{
@@ -113,7 +111,8 @@ void	heredoc_write(t_pipex *infos, char *limiter)
 		write(1, "heredoc> ", 9);
 		line = get_next_line(0);
 		if (!line)
-			(free(limiter), close(infos->tmp_fdin), ft_exit(infos, ERR_MAL));
+			(free(limiter), close(infos->tmp_fdin), \
+			unlink(infos->infile), ft_exit(infos, NULL));
 		if (ft_strncmp(limiter, line, ft_strlen(limiter)))
 		{
 			write(infos->tmp_fdin, line, ft_strlen(line));

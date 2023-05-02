@@ -6,7 +6,7 @@
 /*   By: lfreydie <lfreydie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 13:06:33 by lfreydie          #+#    #+#             */
-/*   Updated: 2023/05/01 17:26:55 by lfreydie         ###   ########.fr       */
+/*   Updated: 2023/05/02 15:56:56 by lfreydie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@
 # define SUCCESS 0
 # define READ 0
 # define WRITE 1
-# define ERR "Error\n"
-# define ERR_ARG "Invalid number of arguments\n"
-# define ERR_CMD "Command not found\n"
-# define ERR_PIP "Pipe didn't work\n"
-# define ERR_MAL "Malloc didn't work\n"
-# define ERR_ENV "Environnement error\n"
-# define ERR_NOP "The file doesn't open or isn't a file\n"
+# define ERR "Error"
+# define ERR_ARG "Invalid number of arguments"
+# define ERR_CMD "Command not found"
+# define ERR_PIP "Pipe didn't work"
+# define ERR_MAL "Malloc didn't work"
+# define ERR_ENV "Environnement error"
+# define ERR_NOP "The file doesn't open or isn't a file"
 
 typedef struct s_cmd
 {
@@ -67,7 +67,7 @@ t_pipex	*init_struct(int ac, char **av, char **envp);
 char	**get_paths(t_pipex *infos);
 void	parse_cmd(t_pipex *infos, char **av);
 void	heredoc_set(t_pipex *infos, char **av);
-void	heredoc_write(t_pipex *infos, char *limiter);
+void	heredoc_write(t_pipex *infos, char *limiter, char *line);
 
 //	EXIT
 void	ft_exit(t_pipex *infos, char *err);
